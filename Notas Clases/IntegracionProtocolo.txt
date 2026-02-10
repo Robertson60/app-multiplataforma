@@ -1,0 +1,4 @@
+
+09/02/2026 
+Tipo de arquitecura que se usara en el software
+Ejemplos - Hexagonal Arquitecture y Clean Arquitecture - Jero recomienda la hexagonal  
