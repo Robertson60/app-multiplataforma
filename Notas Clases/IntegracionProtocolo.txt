@@ -1,4 +1,9 @@
 
 09/02/2026 
+
+Como lo vamos a hacer 
+Monolitico, En la nube, microservicios 
+
 Tipo de arquitecura que se usara en el software
-Ejemplos - Hexagonal Arquitecture y Clean Arquitecture - Jero recomienda la hexagonal  
+Ejemplos - Hexagonal Arquitecture y Clean Arquitecture, capas - Jero recomienda la hexagonal  
+

@@ -1,0 +1,89 @@
+--- El Flujo del Proceso ---
+
+Entra un cliente por recomendacion, anuncio
+
+Si es obra nueva manda planos de proyectos
+Si es remdelacion se manda a medir 
+
+De 1 a muchas citas para confirmar el pedido donde se discuten diseño, precios, Materiales
+
+Una vez confirmado el proyecto se busca forma forma de pago y el diseño pasa a produccion 
+
+Se cuenta con un excel que al meter la informacion de los muebles (piezas) que usara el proyecto calcula costos y cantidad de insumos 
+
+Se hacen el diseño (render) pesado 
+
+Hoja de pedido (contiene informacion del mueble y materiales)
+
+Pasa a un software que optimiza el tamaño de los cortes a hojas de madera 
+
+Brinca a taller 
+
+Se escoge a un instalador disponible 
+
+
+
+Tipo de proovedores (Nacionales/internacionales)
+
+Electrodomesticos, Tornilleria, Madera, Herrajes
+
+
+Pasos de los proyectos 
+
+ -> Cliente llega -> Citas para acordar diseño y precios -> Renders y Hojas de corte -> software de optimizacion ->
+ -> Brinca a taller -> Pasos Taller(Corte -> Enchapado -> Barrenado -> Armado -> Detallado y embalaje ->) flete
+ -> Instalacion -> Garantia/servicios (10 años) -> Archivo muerto 
+
+Traspaso de información
+
+Al ser 2 personas encargadas de diseño cada quien se encarga de su propio proyecto con un extra que 1
+con la hoja de proyecto usa un software de optimizacion para mandar las hojas de corte y etiquetas de cada pieza con
+información de la pieza (Enchapado, y mueble)
+
+En el taller hojas de corte solo pasan a corte,
+
+Aprobación
+
+Despues de las citas de precios y diseño se aprueba el pedido y una vez haciendo eso se crean renders y las hojas depedido
+con los muebles y materiales a usar 
+
+--- Puntos de Dolor y Errores --- 
+
+Desperdicio y Materiales
+
+Siempre se busca tener un stock de materiales de un minimo de materiales (Herrajes, tapapijas, etc) 
+Problemas en el taller con errores de produccion por errores 
+
+Garantías
+
+Todo proyecto tiene 10 años de garantia esos proyectos son archivados en carpetas por cliente y se almacen los 10 años 
+despues de la garantia se va archivo muerto (se destruye)
+
+Durante las garantias existen servicios de garantias 
+
+Retrasos
+
+Los proveedores (En general no cambian son los mismos) muchas veces no cuentan con inventario provocando que el minimo stock
+se acabe y provoque retrasos
+
+--- Requerimientos por Usuario ---
+
+Para el Taller 
+
+    Inventario de insumos locales
+    Visualizacion de hojas de corte de material 
+    Visualizacion de renders de Muebles especiales 
+    Registro de mantenimiento de las maquinas 
+
+Para los Instaladores
+
+    Datos del cliente
+    Diseño del proyecto para instalar 
+
+Para la Administración
+
+    Generador del contrato 
+    Cotizaciones 
+    Hojas de pedido 
+
+
