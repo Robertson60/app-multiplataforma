@@ -87,3 +87,47 @@ Para la Administración
     Hojas de pedido 
 
 
+ ---------- Requerimientos funcionales ---------- 
+
+ --- Módulo de Ventas y Cotización ---
+    - Gestión de Catálogo: El sistema debe permitir cargar materiales, herrajes 
+      y tipos de madera con sus precios actualizados.
+
+    - Generador de Cotizaciones/Contrato : Capacidad de crear un presupuesto sumando materiales 
+      y mano de obra de forma automática.
+
+    - Gestión de Archivos: Poder adjuntar renders y planos PDF a cada folio de cliente.
+
+ --- Módulo de Taller y Producción ()---
+
+    - Orden de Maquila: Generar una lista de materiales y despiece basada en la cotización aprobada.
+
+    - Control de Estados: Cambiar el estatus del proyecto.
+
+    - Notificaciones: Avisar a la oficina cuando un proyecto sale del taller.
+
+    - Reporte de calidad: Capturar evidencia de embalaje terminado y con calidad 
+
+    - Reporte de Incidencias: Levantar reporte en caso de discrepancia de
+
+ --- Módulo de Instalación (Movil) ---
+
+    - Consulta en Campo: Ver planos y renders desde el celular en el sitio de instalación.
+
+    - Reporte de Calidad: Capturar fotos de la instalación terminada y recabar la firma digital del cliente.
+
+    - Reporte de Incidencias: Botón para reportar si una pieza llegó dañada o hay un error de medida.
+
+
+---------- Requerimientos no funcionales ---------- 
+
+    - Multiplataforma: El software debe ser accesible desde navegadores web, computadoras Windows 
+      y dispositivos móviles (Android/iOS) con una base de código única.
+
+    - Disponibilidad: El sistema debe estar disponible en todo momento mediante el uso de infraestructura en la nube.
+
+    - Modo Offline (Móvil): La app de instaladores debe permitir ver planos previamente cargados aunque no haya 
+      señal de internet en la casa del cliente.
+
+    - Seguridad: El acceso debe estar restringido por roles (Vendedor, Carpintero, Instalador, Jefe) 
+      para proteger los costos y márgenes de ganancia
