@@ -29,7 +29,8 @@ class Maderas {
 void main() {
   print("Prueba de ingreso de texto: ");
 
-  stdout.write("Ingrese su nombre g: ");
+  //Cambio cristo
+  stdout.write("Ingrese su nombre: ");
   String? texto = stdin
       .readLineSync()!; // Espera a que el usuario ingrese texto y presione Enter
 
