@@ -1,12 +1,7 @@
-
 //Define Opciones permitidas para campos del un objeto
 import 'dart:io';
 
-enum Acabados {
-  Veteado, 
-  liso, 
-  Alto_Brillo
-  }
+enum Acabados { Veteado, liso, Alto_Brillo }
 
 enum GruesoMM {
   //Asignamos un nombre para guardar el numero de milimetros que representa cada tipo de grosor
@@ -22,7 +17,6 @@ enum GruesoMM {
 }
 
 class Maderas {
-
   String nombre;
   Acabados acabado;
   GruesoMM grueso;
@@ -30,18 +24,19 @@ class Maderas {
   String Prooveedor;
 
   Maderas(this.nombre, this.acabado, this.grueso, this.precio, this.Prooveedor);
-
 }
 
 void main() {
-  
-  print("Prueba de ingreso de texto: " );
-  
-  stdout.write("Ingrese su nombre: ");
-  String? texto = stdin.readLineSync()!; // Espera a que el usuario ingrese texto y presione Enter
-  
+  print("Prueba de ingreso de texto: ");
+
+  stdout.write("Ingrese su nombre g: ");
+  String? texto = stdin
+      .readLineSync()!; // Espera a que el usuario ingrese texto y presione Enter
+
   stdout.write('Ingrese su edad: ');
-  double? entrada = double.tryParse(stdin.readLineSync()!); // Espera a que el usuario ingrese texto y presione Enter
+  double? entrada = double.tryParse(
+    stdin.readLineSync()!,
+  ); // Espera a que el usuario ingrese texto y presione Enter
 
   print("Numero ingresado: $entrada");
   print("Texto ingresado: $texto");
@@ -57,9 +52,4 @@ void main() {
   print("Proveedor: ${madera1.Prooveedor}");
   print("Entrada del usuario: $entrada");
   */
-
 }
-
-
-
-
