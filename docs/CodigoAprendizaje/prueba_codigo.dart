@@ -1,5 +1,7 @@
 
 //Define Opciones permitidas para campos del un objeto
+import 'dart:io';
+
 enum Acabados {
   Veteado, 
   liso, 
@@ -32,15 +34,29 @@ class Maderas {
 }
 
 void main() {
+  
+  print("Prueba de ingreso de texto: " );
+  
+  stdout.write("Ingrese su nombre: ");
+  String? texto = stdin.readLineSync()!; // Espera a que el usuario ingrese texto y presione Enter
+  
+  stdout.write('Ingrese su edad: ');
+  double? entrada = double.tryParse(stdin.readLineSync()!); // Espera a que el usuario ingrese texto y presione Enter
+
+  print("Numero ingresado: $entrada");
+  print("Texto ingresado: $texto");
+
+  /*
   //Creamos un objeto de la clase Maderas con valores para cada campo
   Maderas madera1 = Maderas("Pino", Acabados.Veteado, GruesoMM.delgado, 100.0, "Proveedor A");
-  
   //Imprimimos los valores del objeto creado
   print("Nombre: ${madera1.nombre}");
   print("Acabado: ${madera1.acabado}");
   print("Grueso: ${madera1.grueso.milimetros} mm");
   print("Precio: \$${madera1.precio}");
   print("Proveedor: ${madera1.Prooveedor}");
+  print("Entrada del usuario: $entrada");
+  */
 
 }
 

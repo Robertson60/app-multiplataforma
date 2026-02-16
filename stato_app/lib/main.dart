@@ -1,5 +1,5 @@
 //Importar el codigo de prueba para ver en la aplicacion 
-import 'PruebaGrafica.dart';
+import 'prueba_grafica.dart';
 
 import 'package:flutter/material.dart';
 
