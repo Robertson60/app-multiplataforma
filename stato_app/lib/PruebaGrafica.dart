@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-const int maxSeeds = 250;
+const int maxSeeds = 500;
 
 void main() {
   runApp(const Sunflower());
@@ -10,7 +10,7 @@ void main() {
 
 class Sunflower extends StatefulWidget {
   const Sunflower({super.key});
-
+  
   @override
   State<StatefulWidget> createState() {
     return _SunflowerState();
