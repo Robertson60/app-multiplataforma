@@ -1,56 +1,46 @@
-//Define Opciones permitidas para campos del un objeto
 import 'dart:io';
 
-enum Acabados { Veteado, liso, Alto_Brillo }
+//Creacion de una clase interna 
+class Calculos{
 
-enum GruesoMM {
-  //Asignamos un nombre para guardar el numero de milimetros que representa cada tipo de grosor
-  delgado(12),
-  estandar(16),
-  grueso(18);
+  double suma(double a, double b){
+    return a +b;
+  }
 
-  //Constructor que asigna el valor en milimetros a cada tipo de grosor
-  final int milimetros;
+  double resta(double a, double b){
+    return a - b;
+  }
 
-  //Indicamos que el constructor es privado para evitar que se puedan crear mas valores
-  const GruesoMM(this.milimetros);
+  double multiplicacion(double a, double b){
+    return a * b;
+  }
+
+  double division(double a, double b){
+    
+    if (b ==0){
+      print('No se puede dividir por cero');
+      return 0;
+    }
+    return a/b;
+  }
 }
 
-class Maderas {
-  String nombre;
-  Acabados acabado;
-  GruesoMM grueso;
-  double precio;
-  String Prooveedor;
-
-  Maderas(this.nombre, this.acabado, this.grueso, this.precio, this.Prooveedor);
-}
 
 void main() {
-  print("Prueba de ingreso de texto: ");
 
-  //Cambio cristo
-  stdout.write("Ingrese su nombre: ");
-  String? texto = stdin
-      .readLineSync()!; // Espera a que el usuario ingrese texto y presione Enter
-
-  stdout.write('Ingrese su edad: ');
+  stdout.write('Ingrese un numero A: ');
   double? entrada = double.tryParse(
-    stdin.readLineSync()!,
-  ); // Espera a que el usuario ingrese texto y presione Enter
+  stdin.readLineSync()!,); // Espera a que el usuario ingrese texto y presione Enter
 
+  stdout.write('Ingrese un numero B: ');
+  double? entrada2 = double.tryParse(
+  stdin.readLineSync()!,); // Espera a que el usuario ingrese texto y presione Enter
+
+  Calculos calculos = new Calculos();
+
+
+  print('La suma de A y B es: ${calculos.suma(entrada!, entrada2!)}');
   print("Numero ingresado: $entrada");
-  print("Texto ingresado: $texto");
 
-  /*
-  //Creamos un objeto de la clase Maderas con valores para cada campo
-  Maderas madera1 = Maderas("Pino", Acabados.Veteado, GruesoMM.delgado, 100.0, "Proveedor A");
-  //Imprimimos los valores del objeto creado
-  print("Nombre: ${madera1.nombre}");
-  print("Acabado: ${madera1.acabado}");
-  print("Grueso: ${madera1.grueso.milimetros} mm");
-  print("Precio: \$${madera1.precio}");
-  print("Proveedor: ${madera1.Prooveedor}");
-  print("Entrada del usuario: $entrada");
-  */
+
 }

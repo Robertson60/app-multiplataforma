@@ -23,8 +23,13 @@ Aplicacion para controlar el flujo de trabajo de una tienda de proyectos prefabr
 ## Reglas de codigo 
 
 - El codigo debe ser claro y facil de entender
-- 
 - Los nombres de los archivos tiene que ser en snake_case (eje. prueba_grafica.dart)
 - Los nombres de las Clases, Enums y Widgets usadas tienen que ser en PascalCase (eje. UserAdmin)
 - Los nombres de las Variables, constantes y funciones tienen que ser en camelCase (eje. valorAbsoluto)
+
+- En la carpeta lib/shared/models/ van los archivos que formen el codigo (eje. Cliente, Cotizador, Perfiles)
+- En la carpeta lib/shared/logic/ van los archivos logicos (eje. Operaciones matematicas)
+- En la carpeta lib/shared/services/ se alojara la base de datos 
+- En la carpeta lib/auth/ archivos validarores al login y DB 
+- En la carpeta lib/presentation va la GUI dentro de cada carpeta para cada dispositivo 
 
