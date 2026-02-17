@@ -11,7 +11,12 @@ Aplicacion para controlar el flujo de trabajo de una tienda de proyectos prefabr
 
 
 
+## Codigos de la terminal
 
+- git checkout -b feacture/'Nombre de la rama nueva'      //Crear una rama de trabajo nueva
+- git merge origin/main                                   //Fusiona el main de la nube directo a tu rama
+- dart 'ruta de archivo'.dart                             //Correr codigo (no GUI)
+- adb tcpip 5555 -> adb connect 'direccion IP Wifi'       //Conectar cel al GUI
 
 
 
