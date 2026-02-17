@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+//Entorno de pruebas
 void main() => runApp(const LilyApp());
 
 class LilyApp extends StatelessWidget {
