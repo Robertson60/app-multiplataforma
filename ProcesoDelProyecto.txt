@@ -89,7 +89,7 @@ Para la Administración
 
  ---------- Requerimientos funcionales ---------- 
 
- --- Módulo de Ventas y Cotización ---
+ --- Módulo de Ventas y Cotización (Web/Windows - Administración)---
     - Gestión de Catálogo: El sistema debe permitir cargar materiales, herrajes 
       y tipos de madera con sus precios actualizados.
 
@@ -98,7 +98,7 @@ Para la Administración
 
     - Gestión de Archivos: Poder adjuntar renders y planos PDF a cada folio de cliente.
 
- --- Módulo de Taller y Producción ()---
+ --- Módulo de Taller y Producción (Windows -- Administración/Empleados de taller)---
 
     - Orden de Maquila: Generar una lista de materiales y despiece basada en la cotización aprobada.
 
@@ -110,7 +110,7 @@ Para la Administración
 
     - Reporte de Incidencias: Levantar reporte en caso de discrepancia de
 
- --- Módulo de Instalación (Movil) ---
+ --- Módulo de Instalación (Movil - Administración/Instaladores) ---
 
     - Consulta en Campo: Ver planos y renders desde el celular en el sitio de instalación.
 
