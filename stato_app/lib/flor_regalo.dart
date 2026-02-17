@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-//Entorno de pruebas
 void main() => runApp(const LilyApp());
 
 class LilyApp extends StatelessWidget {
@@ -48,7 +47,7 @@ class _LilyHomeState extends State<LilyHome>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 161, 210, 253),
+      backgroundColor: Colors.black, // Fondo nocturno
       appBar: AppBar(title: const Text("Flor Lily en Flutter")),
       body: Center(
         child: AnimatedBuilder(
@@ -58,7 +57,7 @@ class _LilyHomeState extends State<LilyHome>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomPaint(
-                  size: const Size(300, 300),
+                  size: const Size(400, 400),
                   painter: LilyPainter(radius: _animation.value),
                 ),
                 const SizedBox(height: 20),
@@ -67,7 +66,7 @@ class _LilyHomeState extends State<LilyHome>
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.purple,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -85,11 +84,36 @@ class LilyPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
+    final center = Offset(size.width / 2, size.height / 2);
+
+    // Fondo nocturno con estrellas
+    final backgroundPaint = Paint()..color = Colors.black;
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      backgroundPaint,
+    );
+
+    final starPaint = Paint()..color = Colors.white;
+    final random = Random();
+    for (int i = 0; i < 50; i++) {
+      final dx = random.nextDouble() * size.width;
+      final dy = random.nextDouble() * size.height;
+      canvas.drawCircle(Offset(dx, dy), 1.5, starPaint);
+    }
+
+    // Luna
+    final moonPaint = Paint()..color = Colors.yellow.shade200;
+    canvas.drawCircle(
+      Offset(size.width * 0.8, size.height * 0.2),
+      40,
+      moonPaint,
+    );
+
+    // Flor Lily
+    final petalPaint = Paint()
       ..style = PaintingStyle.fill
       ..color = const Color.fromARGB(255, 231, 106, 235);
 
-    final center = Offset(size.width / 2, size.height / 2);
     const petalCount = 10;
 
     for (int i = 0; i < petalCount; i++) {
@@ -112,9 +136,10 @@ class LilyPainter extends CustomPainter {
         center.dy,
       );
 
-      canvas.drawPath(petalPath, paint);
+      canvas.drawPath(petalPath, petalPaint);
     }
 
+    // Centro de la flor
     final centerPaint = Paint()
       ..color = Colors.yellow
       ..style = PaintingStyle.fill;

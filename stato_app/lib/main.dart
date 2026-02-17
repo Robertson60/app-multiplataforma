@@ -1,11 +1,13 @@
-//Importar el codigo de prueba para ver en la aplicacion 
+//Importar el codigo de prueba para ver en la aplicacion
+import 'package:stato_app/flor_regalo.dart';
+
 import 'prueba_grafica.dart';
 
 import 'package:flutter/material.dart';
 
 void main() {
   //runApp(const MyApp());
-  runApp(const Sunflower());
+  runApp(const LilyApp());
 }
 
 class MyApp extends StatelessWidget {
