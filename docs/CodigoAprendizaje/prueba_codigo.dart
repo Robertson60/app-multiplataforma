@@ -1,46 +1,22 @@
 import 'dart:io';
 
-//Creacion de una clase interna 
-class Calculos{
-
-  double suma(double a, double b){
-    return a +b;
-  }
-
-  double resta(double a, double b){
-    return a - b;
-  }
-
-  double multiplicacion(double a, double b){
-    return a * b;
-  }
-
-  double division(double a, double b){
-    
-    if (b ==0){
-      print('No se puede dividir por cero');
-      return 0;
-    }
-    return a/b;
-  }
-}
-
-
 void main() {
-
+  //sirve para que el usurario escriba en el mismo renglon.
   stdout.write('Ingrese un numero A: ');
-  double? entrada = double.tryParse(
-  stdin.readLineSync()!,); // Espera a que el usuario ingrese texto y presione Enter
 
+  //esto es para guardar la variable
+  double entrada = double.parse(
+    stdin.readLineSync()!,
+  ); // Espera a que el usuario ingrese texto y presione Enter
+
+  //es para escribir en pantalla.
   stdout.write('Ingrese un numero B: ');
-  double? entrada2 = double.tryParse(
-  stdin.readLineSync()!,); // Espera a que el usuario ingrese texto y presione Enter
+  //guardar la variable
+  double entrada2 = double.parse(
+    stdin.readLineSync()!,
+  ); // Espera a que el usuario ingrese texto y presione Enter
 
-  Calculos calculos = new Calculos();
+  double r = entrada + entrada2;
 
-
-  print('La suma de A y B es: ${calculos.suma(entrada!, entrada2!)}');
-  print("Numero ingresado: $entrada");
-
-
+  print(r);
 }
