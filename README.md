@@ -17,7 +17,7 @@ Aplicacion para controlar el flujo de trabajo de una tienda de proyectos prefabr
 - git merge origin/main                                   //Fusiona el main de la nube directo a tu rama
 - dart 'ruta de archivo'.dart                             //Correr codigo (no GUI)
 - adb tcpip 5555 -> adb connect 'direccion IP Wifi'       //Conectar cel al GUI
-
+- cd stato_app -> flutter pub get                         //Corregir errores como tipo barrido de archivos temporale(errores)
 
 
 ## Reglas de codigo 
@@ -32,4 +32,5 @@ Aplicacion para controlar el flujo de trabajo de una tienda de proyectos prefabr
 - En la carpeta lib/shared/services/ se alojara la base de datos 
 - En la carpeta lib/auth/ archivos validarores al login y DB 
 - En la carpeta lib/presentation va la GUI dentro de cada carpeta para cada dispositivo 
+
 

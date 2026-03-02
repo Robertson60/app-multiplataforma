@@ -131,3 +131,5 @@ Para la Administración
 
     - Seguridad: El acceso debe estar restringido por roles (Vendedor, Carpintero, Instalador, Jefe) 
       para proteger los costos y márgenes de ganancia
+
+
