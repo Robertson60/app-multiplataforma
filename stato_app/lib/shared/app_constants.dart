@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+
+class AppConstants {
+
+  // --------------  IDENTIDAD DE MARCA --------------  
+  
+  static const String nombreApp = "Stato";
+  
+  // -------------- COLORES (Paleta Madera & Herramientas) ---
+
+  //Ejemplo
+  static const Color borderRadius = Color.fromARGB(0, 255, 0, 0);
+
+  // -------------- MEDIDAS ESTANDAR --------------------------------
+
+  static const double grosorMelamina = 16.0;
+
+  // --- RUTAS DE ASSETS (Imágenes y Renders) ---
+
+
+
+  // --- CATEGORÍAS PARA MODELOS ---
+  
+
+
+  // --- DISEÑO DE INTERFAZ ---
+  
+
+}
