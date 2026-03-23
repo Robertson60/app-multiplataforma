@@ -1,44 +1,25 @@
 // ignore_for_file: avoid_print
 
-import 'package:stato_app/shared/logic/calculador_huacal.dart';
-import 'package:stato_app/shared/shared.dart'; // Importamos todo desde el barrel file
+//Trae el archivo que engobla todos los archivos 
+import 'package:stato_app/shared/shared.dart';
 
 void main() {
-  print('--- 🪚 PRUEBA DE DESPIECE: MÓDULO DE COCINA ---');
+  final miConfigPuerta = ConfiguracionPuerta(
+    cantidad: CantidadPuertas.dos,
+    jaladera: TipoJaladera.merenti, 
+  );
 
-  // 1. Definimos las medidas que nos daría el cliente
-  double altoCliente = 700.0;  // 70 cm
-  double anchoCliente = 900.0; // 60 cm
-  double fondoCliente = 600.0; // 30 cm
-  double grosorMdf = 16.0;     // 15 mm
+  final alacena = CalculadorGabinete.fabricarHuacal(
+    nombre: "Gabinete Especial",
+    alto: 1800, ancho: 600, fondo: 600, grosor: 16,
+    tieneLateralIzq: true,
+    tieneLateralDer: true, 
+    configPuerta: miConfigPuerta,
+    configEntrepanos: ConfiguracionEntrepanos(cantidad: 4, tipo: TipoEntrepano.movil),
+  );
 
-  // 2. Usamos el calculador para "fabricar" el módulo
-  // Aquí es donde se conectan los 3 archivos:
-  // Calculador crea las Piezas y las mete en el Modulo.
-  
-  final miHuacal = CalculadorHuacal.fabricarHuacalEstandar(
-    
-    nombre: 'Fregadero', 
-    alto: altoCliente, 
-    ancho: anchoCliente, 
-    fondo: fondoCliente, 
-    grosor: grosorMdf);
-
-  // 3. Imprimimos los resultados en consola
-  print('Mueble: ${miHuacal.nombre}');
-  print('Medidas Externas: ${anchoCliente}x${altoCliente}x$fondoCliente mm');
-  print('-------------------------------------------');
-  print('LISTA DE CORTE PARA TALLER:');
-
-  for (var pieza in miHuacal.piezas) {
-    print('- ${pieza.nombre}: ${pieza.largo} x ${pieza.ancho} mm');
+  print('Módulo: ${alacena.nombre}');
+  for (var p in alacena.piezas) {
+    print('${p.cantidad}x ${p.nombre} de ${p.largoBase} x ${p.anchoBase}');
   }
-
-  print('-------------------------------------------');
-  
-  // 4. Probamos el cálculo del área total (importante para costos)
-  double areaTotalCm2 = miHuacal.areaTotal / 100; // Convertimos mm2 a cm2
-  print('Área total de melamina: ${areaTotalCm2.toStringAsFixed(2)} cm²');
-  
-  print('--- ✅ PRUEBA FINALIZADA CON ÉXITO ---');
 }
