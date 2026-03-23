@@ -1,6 +1,10 @@
 // --- MODELOS (Los moldes de tus datos) ---
 export 'models/pieza_corte.dart';
-export 'models/Huacal.dart';
+export 'models/huacal.dart';
+export 'models/herrajes.dart';
+export 'models/config_entrepanos.dart';
+export 'models/config_puerta.dart';
+
 
 // --- LÓGICA (Los cálculos y herramientas) ---
 export 'logic/calculador_huacal.dart';
