@@ -1,54 +1,99 @@
-import '../models/pieza_corte.dart';
-import '../models/huacal.dart';
+import '../shared.dart';
 
-class CalculadorHuacal {
-  static Huacal fabricarHuacalEstandar({
-    //Huacal estandar 
+class CalculadorGabinete {
+
+  //funcion principal del fabricante
+  static Huacal fabricarHuacal({
+
+    //Nombre y medidas requeridas para cada pieza individual 
     required String nombre,
     required double alto,
     required double ancho,
     required double fondo,
     required double grosor,
 
-    //Agregados unicos
-    int numEntrepanos = 0,
-    bool entrepanoFijo = false,
-    bool tienePuerta = true 
+    //Variable confirmatoria de piezas 
+    bool tieneLateralIzq = true,
+    bool tieneLateralDer = true,
+    bool tienePiso = true,
+    bool tieneTecho = true,
 
-
+    //Configuracion para puerta y entrepaños
+    ConfiguracionPuerta? configPuerta,
+    ConfiguracionEntrepanos? configEntrepanos,
 
   }) {
     
-    double anchoInterno = ancho - (grosor * 2);
-    double altoInterno  = alto - (grosor * 2);
+    List<PiezaCorte> piezasFinales = [];
+    List<Herraje> herrajesFinales = [];
 
-    
-    List<PiezaCorte> piezas = [
-      PiezaCorte(nombre: "Lateral Izq", largo: alto, ancho: fondo),
-      PiezaCorte(nombre: "Lateral Der", largo: alto, ancho: fondo),
-      PiezaCorte(nombre: "Piso", largo: anchoInterno, ancho: fondo),
-      PiezaCorte(nombre: "Techo", largo: anchoInterno, ancho: fondo),
-      PiezaCorte(nombre: 'Trasera', largo: altoInterno, ancho: anchoInterno),
-    ];
+    // Calculo del ancho interno del huacal
+    //Operador ternario ? X : Y forma abreviada de un if-else 
+    int numLaterales = (tieneLateralIzq ? 1 : 0) + (tieneLateralDer ? 1 : 0);
+    double anchoInterno = ancho - (grosor * numLaterales);
 
-    if (numEntrepanos > 0 ) {
-      if(entrepanoFijo){
-        for (int i = 1; i <= numEntrepanos; i++) {
-        piezas.add(PiezaCorte(
-          nombre: "Entrepaño $i",
-          largo: anchoInterno - 2,                  // Descuento de holgura
-          ancho: fondo - 20,                        // Se hacen más cortos para que no peguen con la puerta
-        ));
-        }
+    //Contabilizar piezas iguales (Laterales)
+    if (numLaterales > 0) {
+      piezasFinales.add(PiezaCorte(   //Añade piezas al listado de las piezas
+        nombre: "Laterales", 
+        largoBase: alto, 
+        anchoBase: fondo, 
+        cantidad: numLaterales
+      ));
+    }
+
+    //Contabilizar piezas iguales (Piso/Techo)
+    int numHorizontales = (tienePiso ? 1 : 0) + (tieneTecho ? 1 : 0);
+    if (numHorizontales > 0) {
+      piezasFinales.add(PiezaCorte(
+        nombre: "Piso/Techo", 
+        largoBase: anchoInterno, 
+        anchoBase: fondo, 
+        cantidad: numHorizontales
+      ));
+    }
+
+    //Cantabilizar Entrepaños
+    if (configEntrepanos != null && configEntrepanos.cantidad > 0) {
+      double anchoE = (configEntrepanos.tipo == TipoEntrepano.movil)       //Si la configuracion de entrepaño es movil
+          ? anchoInterno - (configEntrepanos.holguraLateral * 2)           //Quitamos fugas para algo quitable
+          : anchoInterno;                                                  //Si no el ancho interno total
+      double fondoE = configEntrepanos.cortoAlFrente ? fondo - configEntrepanos.descuentoFondo : fondo; //Medidas de fondo
+
+      piezasFinales.add(PiezaCorte(
+        nombre: "Entrepaños (${configEntrepanos.tipo.name})",
+        largoBase: anchoE,
+        anchoBase: fondoE,
+        cantidad: configEntrepanos.cantidad
+      ));
+    }
+
+    //Puertas y Jaladeras
+    if (configPuerta != null) {
+      double altoP = alto + configPuerta.descuentoPorJaladera + configPuerta.traslapeInferior;
+      double anchoP = (configPuerta.cantidad == CantidadPuertas.dos)
+          ? (ancho / 2) - (configPuerta.luzEntrePuertas / 2)
+          : ancho - 4;
+      
+      int cantPuertas = (configPuerta.cantidad == CantidadPuertas.dos) ? 2 : 1;
+
+      piezasFinales.add(PiezaCorte(
+        nombre: "Puerta (${configPuerta.jaladera.name})", 
+        largoBase: altoP,
+        anchoBase: anchoP,
+        cantidad: cantPuertas
+      ));
+
+      // Herrajes
+      if (configPuerta.jaladera == TipoJaladera.fisica) {
+        herrajesFinales.add(Herraje(nombre: "Jaladera Metálica", cantidad: cantPuertas));
       }
     }
 
-   
-    return Huacal(nombre: nombre, piezas: piezas);
+    
 
+    return Huacal(nombre: nombre, piezas: piezasFinales, herrajes: herrajesFinales);
   }
 
   
 }
-
-

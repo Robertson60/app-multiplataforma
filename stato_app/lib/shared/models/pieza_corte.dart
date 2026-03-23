@@ -1,12 +1,14 @@
 
 class PiezaCorte {
   final String nombre;
-  final double largo;
-  final double ancho;
+  final double largoBase;
+  final double anchoBase;
+  final int cantidad;
 
   PiezaCorte({
     required this.nombre,
-    required this.largo,
-    required this.ancho,
+    required this.largoBase,
+    required this.anchoBase,
+    this.cantidad = 1
   });
 }
