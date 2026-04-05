@@ -56,7 +56,7 @@ void main() {
     if (p.canto10       != null) { final key = '${p.canto10!.nombre} 1mm';         metrosPorCanto[key] = (metrosPorCanto[key] ?? 0) + p.metrosCanto10; }
   }
   metrosPorCanto.forEach((nombre, metros) {
-    print('$nombre: ${metros.toStringAsFixed(2)} ml');
+    print('$nombre: ${metros.toStringAsFixed(2)} mts');
   });
 
   //Imprimir la lista de herrajes
