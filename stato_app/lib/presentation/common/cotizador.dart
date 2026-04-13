@@ -14,13 +14,13 @@ class PantallaCalculador extends StatefulWidget {
 class _PantallaCalculadorState extends State<PantallaCalculador> {
 
   //Controladores de texto obtienen el valor de los campos de texto
-  final _nombre    = TextEditingController(text: "Gabinete");            
+  final _nombre    = TextEditingController(text: "Gabinete");               //Ya vienen un texto preescrito (se puede borrar)     
   final _alto      = TextEditingController();
   final _ancho     = TextEditingController();
   final _fondo     = TextEditingController();
   final _matHuacal = TextEditingController();
   final _matVista  = TextEditingController();
-  final _nombreBisagra  = TextEditingController(text: "Bisagra");            //Ya vienen un texto preescrito (se puede borrar)
+  final _nombreBisagra  = TextEditingController(text: "Bisagra");            
   final _nombreJaladera = TextEditingController(text: "Jaladera Metálica");
 
   //Configuracion de puertas
@@ -52,7 +52,7 @@ class _PantallaCalculadorState extends State<PantallaCalculador> {
         materialHuacal: ConfiguracionMaterial(terminado: _matHuacal.text.isEmpty ? "Huacal" : _matHuacal.text),   //Material del huacal
         materialVista:  ConfiguracionMaterial(terminado: _matVista.text.isEmpty  ? "Vista"  : _matVista.text),    //Material de Frente
         //Si tiene puertas se crea la configuracion de puerta, si no se deja en null
-        configPuerta: _tienePuerta ? ConfiguracionPuerta(
+        configPuerta:    _tienePuerta ? ConfiguracionPuerta(
           cantidad:      _cantidad,
           jaladera:      _jaladera,
           nombreBisagra: _nombreBisagra.text,

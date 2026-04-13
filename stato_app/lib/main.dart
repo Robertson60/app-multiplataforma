@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stato_app/presentation/common/cotizador.dart';
+//import 'package:stato_app/presentation/common/cotizador.dart';
+import 'package:stato_app/presentation/common/login.dart';
 import 'package:stato_app/shared/app_constants.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const PantallaCalculador(),
+      home: const PantallaLogin(),
     );
   }
 }
