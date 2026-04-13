@@ -1,11 +1,13 @@
 // importo la libreria principal de flutter para crear la app
 import 'package:flutter/material.dart';
+//import 'package:stato_app/presentation/common/cotizador.dart';
+import 'package:stato_app/presentation/common/login.dart';
+import 'package:stato_app/shared/app_constants.dart';
 
 // importo mi pantalla principal donde estaran los procesos
 import 'presentation/common/process_screen.dart';
 
 void main() {
-  // inicio la aplicacion ejecutando mi widget principal
   runApp(const MyApp());
 }
 
@@ -17,20 +19,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // construyo la aplicacion usando materialapp
     return MaterialApp(
-      // defino el titulo de la aplicacion
-      title: 'gestion de produccion',
-
-      // configuro el tema de la aplicacion
+      title: AppConstants.nombreApp,
       theme: ThemeData(
-        // defino los colores usando una semilla
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-
-        // activo material 3
-        useMaterial3: true,
       ),
-
-      // defino la pantalla principal que se va a mostrar
-      home: const ProcessScreen(),
+      home: const PantallaLogin(),
     );
   }
 }

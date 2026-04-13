@@ -4,6 +4,8 @@ export 'models/huacal.dart';
 export 'models/herrajes.dart';
 export 'models/config_entrepanos.dart';
 export 'models/config_puerta.dart';
+export 'models/config_canto.dart';
+export 'models/config_material.dart';
 
 
 // --- LÓGICA (Los cálculos y herramientas) ---

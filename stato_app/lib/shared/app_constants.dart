@@ -13,7 +13,9 @@ class AppConstants {
 
   // -------------- MEDIDAS ESTANDAR --------------------------------
 
-  static const double grosorMelamina = 16.0;
+  static const double grosorMelamina    = 16.0;
+  static const double grosorCanto05 =   .5;
+  static const double grosorCanto10  =  1.0; 
 
   // --- RUTAS DE ASSETS (Imágenes y Renders) ---
 
