@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // importo mi pantalla principal donde estaran los procesos
-import 'presentation/process_screen.dart';
+import 'presentation/common/process_screen.dart';
 
 void main() {
   // inicio la aplicacion ejecutando mi widget principal
