@@ -1,5 +1,5 @@
 // importo la clase Process desde otro archivo
-import 'procesos.dart';
+import 'package:stato_app/shared/shared.dart';
 
 // defino la clase que se encarga de manejar los procesos
 class ProcessManager {
