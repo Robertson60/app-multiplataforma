@@ -4,14 +4,14 @@ import 'package:stato_app/shared/shared.dart';    //Libreria con el paquete de a
 
 
 //Pantalla principal del cotizador 
-class PantallaCalculador extends StatefulWidget {
-  const PantallaCalculador({super.key});
+class PantallaCotizador extends StatefulWidget {
+  const PantallaCotizador({super.key});
 
   @override
-  State<PantallaCalculador> createState() => _PantallaCalculadorState();
+  State<PantallaCotizador> createState() => _PantallaCotizadorState();
 }
 //Clase que maneja el estado de la pantalla del cotizador
-class _PantallaCalculadorState extends State<PantallaCalculador> {
+class _PantallaCotizadorState extends State<PantallaCotizador> {
 
   //Controladores de texto obtienen el valor de los campos de texto
   final _nombre    = TextEditingController(text: "Gabinete");               //Ya vienen un texto preescrito (se puede borrar)     
@@ -264,7 +264,7 @@ class _ResultadoHuacal extends StatelessWidget {
         ...metrosPorCanto.entries.map((e) => ListTile(
           dense: true,
           title: Text(e.key),
-          trailing: Text("${e.value.toStringAsFixed(2)} ml"),
+          trailing: Text("${e.value.toStringAsFixed(2)} m"),
         )),
 
         const Divider(),

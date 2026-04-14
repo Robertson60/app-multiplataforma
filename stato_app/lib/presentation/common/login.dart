@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stato_app/presentation/common/cotizador.dart';
+import '../shared.dart';
 
 class PantallaLogin extends StatefulWidget {
   const PantallaLogin({super.key});
@@ -33,11 +33,12 @@ class _PantallaLoginState extends State<PantallaLogin> {
             children: [
               //Título
               const Text(
-                "proyecto",
+                "Stato Cocinas",
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2,
+                  
                 ),
               ),
         
@@ -88,7 +89,7 @@ class _PantallaLoginState extends State<PantallaLogin> {
 
                     Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const PantallaCalculador()),
+                    MaterialPageRoute(builder: (context) => const PantallaPrincipal()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
