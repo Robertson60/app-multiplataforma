@@ -27,5 +27,6 @@ class AppConstants {
 
   // --- DISEÑO DE INTERFAZ ---
   
+  static const String trabajando = 'Codigo en proceso';
 
 }
