@@ -6,8 +6,8 @@ export 'models/config_entrepanos.dart';
 export 'models/config_puerta.dart';
 export 'models/config_canto.dart';
 export 'models/config_material.dart';
-export 'models/procesos.dart';
-
+export 'models/proyecto.dart';
+export 'models/subproceso.dart';
 
 // --- LÓGICA (Los cálculos y herramientas) ---
 export 'logic/calculador_huacal.dart';

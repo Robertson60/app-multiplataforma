@@ -2,27 +2,23 @@ import 'package:flutter/material.dart';
 import '../shared.dart';
 import '../../shared/shared.dart';
 
-class PantallaPrincipal extends StatefulWidget{
+class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({super.key});
-  
+
   @override
-  State<PantallaPrincipal> createState() => _PantallaPrincipalState(); 
-  
-  }
+  State<PantallaPrincipal> createState() => _PantallaPrincipalState();
+}
 
-class _PantallaPrincipalState extends State<PantallaPrincipal>{
-
+class _PantallaPrincipalState extends State<PantallaPrincipal> {
   //Variables
-
 
   //Funciones
 
-
   //Pantalla
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(AppConstants.trabajando) ),
+      appBar: AppBar(title: const Text(AppConstants.trabajando)),
       body: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),
@@ -39,56 +35,58 @@ class _PantallaPrincipalState extends State<PantallaPrincipal>{
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(
-                                context, 
-                                MaterialPageRoute(builder: (context) => const PantallaCotizador()),
-                                );
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PantallaCotizador(),
+                                ),
+                              );
                             },
-                            child: const Text('Cotizador')
-                          )
+                            child: const Text('Cotizador'),
+                          ),
                         ),
 
-                        const SizedBox(width: 10,),
+                        const SizedBox(width: 10),
 
                         SizedBox(
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(
-                                context, 
-                                MaterialPageRoute(builder: (context) => const ProcessScreen()),
-                                );
-                              },
-                          child: const Text('Procesos')
-                          )
-                        )
-                      ]
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ProcesoPantalla(),
+                                ),
+                              );
+                            },
+                            child: const Text('Procesos'),
+                          ),
+                        ),
+                      ],
                     ),
-
-                  ] 
+                  ],
                 ),
               ),
               Expanded(
-                flex:  3,
+                flex: 3,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     //Calendario y Titulo
-                    const Text('------',
-                    style: TextStyle(
+                    const Text(
+                      '------',
+                      style: TextStyle(
                         fontSize: 40.0,
                         fontWeight: FontWeight.bold,
-                        letterSpacing: 2
+                        letterSpacing: 2,
                       ),
                     ),
-                    
-                  ]
+                  ],
                 ),
               ),
-            ]    
-          )
+            ],
+          ),
         ),
-      )
-
+      ),
     );
-
   }
-  }
+}

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:stato_app/presentation/common/login.dart';
 import 'package:stato_app/shared/app_constants.dart';
 
-
 void main() {
   runApp(const MyApp());
 }

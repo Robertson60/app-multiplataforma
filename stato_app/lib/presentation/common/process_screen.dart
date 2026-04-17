@@ -1,142 +1,222 @@
-// Importo la libreria principal de Flutter para crear la interfaz
 import 'package:flutter/material.dart';
-
-// Importo mi logica donde manejo los procesos
 import '../../shared/logic/manager.dart';
+import '../../shared/models/proyecto.dart';
+import '../../shared/models/subproceso.dart';
 
-// Defino la pantalla principal como un widget con estado
-class ProcessScreen extends StatefulWidget {
-  const ProcessScreen({super.key});
+class ProcesoPantalla extends StatefulWidget {
+  const ProcesoPantalla({super.key});
 
   @override
-  State<ProcessScreen> createState() => _ProcessScreenState();
+  State<ProcesoPantalla> createState() => _ProcesoPantallaState();
 }
 
-// Aqui manejo el estado de mi pantalla
-class _ProcessScreenState extends State<ProcessScreen> {
-  // Creo una instancia del manager para controlar mis procesos
+class _ProcesoPantallaState extends State<ProcesoPantalla> {
   final ProcessManager manager = ProcessManager();
+  final TextEditingController projectController = TextEditingController();
 
-  // Creo un controlador para leer lo que escribo en el TextField
-  final TextEditingController controller = TextEditingController();
+  Color _getStageColor(String stage) {
+    switch (stage) {
+      case Stages.venta:
+        return Colors.blue.shade100;
+      case Stages.produccion:
+        return Colors.orange.shade100;
+      case Stages.instalacion:
+        return Colors.green.shade100;
+      default:
+        return Colors.grey.shade200;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Uso Scaffold como estructura base de mi pantalla
     return Scaffold(
-      // Aqui creo la barra superior con un titulo
-      appBar: AppBar(title: const Text("Gestion de Procesos")),
+      appBar: AppBar(title: const Text("Gestión de Proyectos")),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildStageSection(Stages.venta, "Venta"),
+            _buildStageSection(Stages.produccion, "Producción"),
+            _buildStageSection(Stages.instalacion, "Instalación"),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Nuevo proyecto"),
+                content: TextField(
+                  controller: projectController,
+                  decoration: const InputDecoration(
+                    labelText: "Nombre del proyecto",
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Cancelar"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (projectController.text.isNotEmpty) {
+                        setState(() {
+                          manager.addProject(projectController.text);
+                          projectController.clear();
+                        });
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: const Text("Agregar"),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        icon: const Icon(Icons.add),
+        label: const Text("Proyecto"),
+      ),
+    );
+  }
 
-      // Aqui construyo todo el contenido de la pantalla
-      body: Column(
+  Widget _buildStageSection(String stage, String title) {
+    final projects = manager.projects
+        .where((p) => p.currentStage == stage)
+        .toList();
+
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Aqui creo el campo para agregar procesos
-          Padding(
-            padding: const EdgeInsets.all(8.0), // Le doy espacio alrededor
-            child: Row(
-              children: [
-                // Hago que el campo de texto ocupe todo el espacio disponible
-                Expanded(
-                  child: TextField(
-                    controller: controller, // Conecto el controlador
-                    decoration: const InputDecoration(
-                      labelText: "Nombre del proceso", // Texto de ayuda
+          Text(
+            title,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          ...projects.map(
+            (project) => Card(
+              color: _getStageColor(stage),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ExpansionTile(
+                title: Text(
+                  project.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                subtitle: _buildProgress(project),
+                children: [
+                  // Lista de subprocesos
+                  Column(
+                    children: project.subProcesses.map((sub) {
+                      return ListTile(
+                        title: Text(sub.name),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                sub.isCompleted
+                                    ? Icons.check_circle
+                                    : Icons.radio_button_unchecked,
+                                color: sub.isCompleted
+                                    ? Colors.green
+                                    : Colors.grey,
+                              ),
+                              onPressed: () {
+                                _confirmCompletion(project, sub);
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                setState(() {
+                                  manager.removeSubProcess(project.id, sub.id);
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+
+                  // Campo para agregar subproceso
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      onSubmitted: (value) {
+                        if (value.isNotEmpty) {
+                          setState(() {
+                            manager.addSubProcess(project.id, value);
+                          });
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        labelText: "Nuevo subproceso",
+                        prefixIcon: Icon(Icons.add),
+                      ),
                     ),
                   ),
-                ),
-
-                // Creo el boton para agregar procesos
-                ElevatedButton(
-                  onPressed: () {
-                    // Verifico que el campo no este vacio
-                    if (controller.text.isNotEmpty) {
-                      // Actualizo la interfaz
-                      setState(() {
-                        // Agrego el proceso usando el manager
-                        manager.addProcess(controller.text);
-
-                        // Limpio el campo de texto
-                        controller.clear();
-                      });
-                    }
-                  },
-                  child: const Text("Agregar"),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
+        ],
+      ),
+    );
+  }
 
-          // Aqui muestro la lista de procesos
-          Expanded(
-            child: ListView.builder(
-              // Indico cuantos procesos hay
-              itemCount: manager.processes.length,
+  Widget _buildProgress(Project project) {
+    final completedCount = project.subProcesses
+        .where((s) => s.isCompleted)
+        .length;
+    final totalCount = project.subProcesses.length;
+    final progress = totalCount == 0 ? 0.0 : completedCount / totalCount;
 
-              // Construyo cada elemento de la lista
-              itemBuilder: (context, index) {
-                // Obtengo el proceso actual
-                final process = manager.processes[index];
-
-                return ListTile(
-                  // Muestro el nombre del proceso
-                  title: Text(process.name),
-
-                  // Agrego botones al lado derecho
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min, // Ajusto el tamaño
-                    children: [
-                      // Boton para marcar como completado
-                      IconButton(
-                        icon: Icon(
-                          // Cambio el icono dependiendo si esta completo o no
-                          process.isCompleted
-                              ? Icons.check_circle
-                              : Icons.radio_button_unchecked,
-
-                          // Cambio el color dependiendo del estado
-                          color: process.isCompleted
-                              ? Colors.green
-                              : Colors.grey,
-                        ),
-
-                        onPressed: () {
-                          setState(() {
-                            // Marco el proceso como completado
-                            manager.markCompleted(index);
-                          });
-                        },
-                      ),
-
-                      // Boton para eliminar el proceso
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          setState(() {
-                            // Elimino el proceso de la lista
-                            manager.removeProcess(index);
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (totalCount > 0)
+          LinearProgressIndicator(
+            value: progress,
+            color: Colors.green,
+            backgroundColor: Colors.grey[300],
           ),
+        if (totalCount > 0)
+          Text("$completedCount de $totalCount subprocesos completados"),
+      ],
+    );
+  }
 
-          // Aqui muestro cual es el proceso actual
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              // Si ya complete todos los procesos muestro este mensaje
-              manager.currentStep == -1
-                  ? "Todos los procesos completados"
-                  // Si no, muestro el proceso actual
-                  : "Proceso actual: ${manager.processes[manager.currentStep].name}",
-
-              // Le doy estilo al texto
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+  void _confirmCompletion(Project project, SubProcess sub) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Confirmar avance"),
+        content: Text(
+          "¿Seguro que quieres marcar '${sub.name}' como completado?",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancelar"),
+          ),
+          ElevatedButton.icon(
+            icon: const Icon(Icons.check),
+            label: const Text("Sí, avanzar"),
+            onPressed: () {
+              setState(() {
+                manager.completeSubProcess(project.id, sub.id);
+              });
+              Navigator.pop(context);
+            },
           ),
         ],
       ),
