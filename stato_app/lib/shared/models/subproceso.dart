@@ -1,7 +1,7 @@
 class SubProcess {
-  final String id; // Identificador único
-  String name; // Nombre del subproceso
-  bool isCompleted; // Estado del subproceso
+  final String id;
+  String name;
+  bool isCompleted;
 
   SubProcess({required this.name, this.isCompleted = false})
     : id = DateTime.now().millisecondsSinceEpoch.toString();

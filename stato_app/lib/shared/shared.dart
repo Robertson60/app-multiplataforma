@@ -6,11 +6,13 @@ export 'models/config_entrepanos.dart';
 export 'models/config_puerta.dart';
 export 'models/config_canto.dart';
 export 'models/config_material.dart';
-export 'models/proyecto.dart';
+export 'models/proceso.dart';
 export 'models/subproceso.dart';
+export 'models/proyecto.dart';
 
 // --- LÓGICA (Los cálculos y herramientas) ---
 export 'logic/calculador_huacal.dart';
+export 'logic/manager.dart';
 
 // --- SERVICIOS (Base de Datos) ---
 export 'services/sql_services.dart';

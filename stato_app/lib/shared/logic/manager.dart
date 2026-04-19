@@ -1,4 +1,5 @@
 import '../models/proyecto.dart';
+import '../models/proceso.dart';
 import '../models/subproceso.dart';
 
 class ProcessManager {
@@ -6,50 +7,58 @@ class ProcessManager {
 
   List<Project> get projects => _projects;
 
-  // Agregar un nuevo proyecto
   void addProject(String name) {
     _projects.add(Project(name: name));
   }
 
-  // Eliminar proyecto
   void removeProject(String id) {
     _projects.removeWhere((p) => p.id == id);
   }
 
-  // Agregar subproceso a un proyecto
-  void addSubProcess(String projectId, String subName) {
-    final project = _projects.firstWhere((p) => p.id == projectId);
-    project.subProcesses.add(SubProcess(name: subName));
+  Process _getCurrentProcess(Project project) {
+    return project.processes[project.currentProcessIndex];
   }
 
-  // Eliminar subproceso
+  void addSubProcess(String projectId, String name) {
+    final project = _projects.firstWhere((p) => p.id == projectId);
+    final process = _getCurrentProcess(project);
+
+    process.subProcesses = List.from(process.subProcesses)
+      ..add(SubProcess(name: name));
+  }
+
   void removeSubProcess(String projectId, String subId) {
     final project = _projects.firstWhere((p) => p.id == projectId);
-    project.subProcesses.removeWhere((s) => s.id == subId);
+    final process = _getCurrentProcess(project);
+
+    process.subProcesses = process.subProcesses
+        .where((s) => s.id != subId)
+        .toList();
   }
 
-  // Marcar subproceso como completado (con confirmación en UI)
   void completeSubProcess(String projectId, String subId) {
     final project = _projects.firstWhere((p) => p.id == projectId);
-    final sub = project.subProcesses.firstWhere((s) => s.id == subId);
-    sub.isCompleted = true;
+    final process = _getCurrentProcess(project);
 
-    // Si todos los subprocesos están completos, avanzar al siguiente stage
-    if (project.subProcesses.every((s) => s.isCompleted)) {
-      _advanceStage(project);
+    final index = process.subProcesses.indexWhere((s) => s.id == subId);
+
+    if (index == -1) return;
+
+    process.subProcesses[index].isCompleted = true;
+
+    // avanzar subproceso
+    if (process.currentSubIndex < process.subProcesses.length - 1) {
+      process.currentSubIndex++;
+    } else {
+      _advanceProcess(project);
     }
   }
 
-  // Avanzar automáticamente al siguiente proceso principal
-  void _advanceStage(Project project) {
-    if (project.currentStage == Stages.venta) {
-      project.currentStage = Stages.produccion;
-      project.subProcesses.clear(); // limpiar subprocesos para nueva etapa
-    } else if (project.currentStage == Stages.produccion) {
-      project.currentStage = Stages.instalacion;
-      project.subProcesses.clear();
-    } else if (project.currentStage == Stages.instalacion) {
-      project.isCompleted = true; // proyecto finalizado
+  void _advanceProcess(Project project) {
+    if (project.currentProcessIndex < project.processes.length - 1) {
+      project.currentProcessIndex++;
+    } else {
+      project.isCompleted = true;
     }
   }
 }
