@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:stato_app/shared/shared.dart'
 
-import '../shared/logic/manager.dart';
+
+
 
 class ProcesoPantalla extends StatefulWidget {
   const ProcesoPantalla({super.key});
