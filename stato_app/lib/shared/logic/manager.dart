@@ -1,9 +1,13 @@
-import '../models/proyecto.dart';
-import '../models/proceso.dart';
-import '../models/subproceso.dart';
+import 'package:stato_app/shared/shared.dart';
 
 class ProcessManager {
   final List<Project> _projects = [];
+
+  final Map<Stage, List<SubProcess>> stageProcesses = {
+    Stage.venta: [],
+    Stage.produccion: [],
+    Stage.instalacion: [],
+  };
 
   List<Project> get projects => _projects;
 
@@ -15,48 +19,31 @@ class ProcessManager {
     _projects.removeWhere((p) => p.id == id);
   }
 
-  Process _getCurrentProcess(Project project) {
-    return project.processes[project.currentProcessIndex];
+  void addSubProcessToStage(Stage stage, String name) {
+    stageProcesses[stage]!.add(SubProcess(name: name));
   }
 
-  void addSubProcess(String projectId, String name) {
-    final project = _projects.firstWhere((p) => p.id == projectId);
-    final process = _getCurrentProcess(project);
-
-    process.subProcesses = List.from(process.subProcesses)
-      ..add(SubProcess(name: name));
+  void removeSubProcessFromStage(Stage stage, String subId) {
+    stageProcesses[stage]!.removeWhere((s) => s.id == subId);
   }
 
-  void removeSubProcess(String projectId, String subId) {
-    final project = _projects.firstWhere((p) => p.id == projectId);
-    final process = _getCurrentProcess(project);
+  void completeSubProcess(Project project) {
+    final stage = Stage.values[project.currentProcessIndex];
+    final processes = stageProcesses[stage]!;
 
-    process.subProcesses = process.subProcesses
-        .where((s) => s.id != subId)
-        .toList();
-  }
+    if (processes.isEmpty) return;
 
-  void completeSubProcess(String projectId, String subId) {
-    final project = _projects.firstWhere((p) => p.id == projectId);
-    final process = _getCurrentProcess(project);
-
-    final index = process.subProcesses.indexWhere((s) => s.id == subId);
-
-    if (index == -1) return;
-
-    process.subProcesses[index].isCompleted = true;
-
-    // avanzar subproceso
-    if (process.currentSubIndex < process.subProcesses.length - 1) {
-      process.currentSubIndex++;
+    if (project.currentSubIndex < processes.length - 1) {
+      project.currentSubIndex++;
     } else {
-      _advanceProcess(project);
+      _advanceStage(project);
     }
   }
 
-  void _advanceProcess(Project project) {
-    if (project.currentProcessIndex < project.processes.length - 1) {
+  void _advanceStage(Project project) {
+    if (project.currentProcessIndex < Stage.values.length - 1) {
       project.currentProcessIndex++;
+      project.currentSubIndex = 0;
     } else {
       project.isCompleted = true;
     }

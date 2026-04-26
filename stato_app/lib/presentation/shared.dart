@@ -4,7 +4,7 @@ export 'common/login.dart';
 export 'common/process_screen.dart';
 
 //Desktop/Web
-export 'desktop_web/principal.dart';
+export 'common/principal.dart';
 
 
 //Mobile
