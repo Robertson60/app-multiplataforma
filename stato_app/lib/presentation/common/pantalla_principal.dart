@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'cotizador.dart';
-import 'process_screen.dart';
+import 'pantalla_cotizador.dart';
+import 'pantalla_proceso.dart';
 
 class PantallaPrincipal extends StatefulWidget {
   const PantallaPrincipal({super.key});

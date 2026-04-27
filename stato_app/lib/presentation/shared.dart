@@ -1,14 +1,14 @@
 //common
-export 'common/cotizador.dart';
-export 'common/login.dart';
-export 'common/process_screen.dart';
-export 'common/proyecto.dart';
-export 'common/formulario.dart';
-export 'common/prueba.dart';
+export 'common/pantalla_cotizador.dart';
+export 'common/pantalla_login.dart';
+export 'common/pantalla_proceso.dart';
+export 'common/desplegable_proyecto.dart';
+export 'common/desplegable_huacal.dart';
+export 'common/pantalla_proyecto.dart';
 export 'common/pantalla_clientes.dart';
 
 //Desktop/Web
-export 'common/principal.dart';
+export 'common/borrar_primero_rescatardatos.dart';
 
 
 //Mobile

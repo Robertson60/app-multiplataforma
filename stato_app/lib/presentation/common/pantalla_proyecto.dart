@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'proyecto.dart'; // Pantalla del editor
+import 'desplegable_proyecto.dart';
 
 class PantallaListaProyectos extends StatelessWidget {
   final String clienteId;

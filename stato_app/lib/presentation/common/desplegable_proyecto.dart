@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'formulario.dart';
+import 'desplegable_huacal.dart';
 import '../../shared/shared.dart';
 
 class PantallaProyecto extends StatefulWidget {

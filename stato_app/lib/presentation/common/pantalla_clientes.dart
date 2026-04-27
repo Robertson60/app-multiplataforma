@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'prueba.dart'; // Importa tu lista de proyectos
+import 'pantalla_proyecto.dart';
 
 
 class PantallaListaClientes extends StatelessWidget {

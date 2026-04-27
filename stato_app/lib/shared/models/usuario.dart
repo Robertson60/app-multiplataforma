@@ -17,7 +17,7 @@ class UsuarioStato {
       uid: id,
       nombre: data['nombre'] ?? '',
       email: data['email'] ?? '',
-      rol: data['rol'] ?? 'taller', // Por defecto el nivel más bajo
+      rol: data['rol'] ?? 'taller', 
     );
   }
 }
