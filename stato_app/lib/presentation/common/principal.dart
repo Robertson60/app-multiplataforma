@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import '../shared.dart';
 import '../../shared/shared.dart';
 
-class PantallaPrincipal extends StatefulWidget{
-  const PantallaPrincipal({super.key});
-  
-  @override
-  State<PantallaPrincipal> createState() => _PantallaPrincipalState(); 
-  
-  }
+class PantallaPrincipal extends StatelessWidget{
+  final String rolUsuario;
+  const PantallaPrincipal({super.key, required this.rolUsuario});
 
-class _PantallaPrincipalState extends State<PantallaPrincipal>{
-
+  
   //Variables
 
 
@@ -40,10 +35,10 @@ class _PantallaPrincipalState extends State<PantallaPrincipal>{
                             onPressed: () {
                               Navigator.push(
                                 context, 
-                                MaterialPageRoute(builder: (context) => const PantallaCotizador()),
+                                MaterialPageRoute(builder: (context) =>  PantallaListaClientes(rolUsuario: rolUsuario)),
                                 );
                             },
-                            child: const Text('Cotizador')
+                            child: const Text('Proyectos')
                           )
                         ),
 
