@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "151298836584",
+    "project_id": "stato-cocinas",
+    "storage_bucket": "stato-cocinas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151298836584:android:a09f26da11d689e28f13dd",
+        "android_client_info": {
+          "package_name": "com.example.stato_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRycnUkoY4Y4t7G4ZZ_hV2F4mRvhbCoHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
