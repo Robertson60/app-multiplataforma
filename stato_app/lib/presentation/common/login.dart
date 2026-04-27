@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import '../shared.dart';
+import '../shared.dart';
 
-import 'pantalla_principal.dart';
+//import 'pantalla_principal.dart';
 
 
 class PantallaLogin extends StatefulWidget {
@@ -58,8 +58,8 @@ class _PantallaLoginState extends State<PantallaLogin> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              //builder: (context) => PantallaPrincipal(rolUsuario: rolRecuperado),
-              builder: (context) => PantallaPrincipal(),
+              builder: (context) => PantallaPrincipal(rolUsuario: rolRecuperado),
+              //builder: (context) => PantallaPrincipal(),
             ),
           );
         }
