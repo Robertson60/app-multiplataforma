@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:stato_app/presentation/shared_pantallas.dart';
 
-import 'pantalla_cotizador.dart';
-import 'pantalla_proceso.dart';
 
 class PantallaPrincipal extends StatefulWidget {
-  const PantallaPrincipal({super.key});
+  final String rolUsuario;
+  const PantallaPrincipal({super.key, required this.rolUsuario});
 
   @override
   State<PantallaPrincipal> createState() => _PantallaPrincipalState();
@@ -16,8 +16,10 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
   final List<Widget> _pantallas = [
     //Pantallas de inicio 
-    const PantallaCotizador(),  
-    const ProcessScreen(), 
+    const PantallaProceso(),
+    const PantallaListaClientes(rolUsuario: 'admin'),
+    const PantallaInventario(rolUsuario: 'admin'),
+    const PantallaAjustes(rolUsuario: 'admin'),
     
   ];
 
@@ -40,11 +42,11 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.calculate),
-            label: 'Cotizador',
+            label: 'Procesos',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.folder_special),
-            label: 'Proyectos',
+            label: 'Clientes',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.inventory_2),

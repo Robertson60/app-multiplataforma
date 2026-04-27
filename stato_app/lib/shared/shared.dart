@@ -8,10 +8,13 @@ export 'models/config_canto.dart';
 export 'models/config_material.dart';
 export 'models/procesos.dart';
 export 'models/proyecto.dart';
+export 'models/usuario.dart';
+export 'models/proyecto_prueba.dart';
 
 
 // --- LÓGICA (Los cálculos y herramientas) ---
 export 'logic/calculador_huacal.dart';
+export 'logic/manager.dart';
 
 // --- SERVICIOS (Base de Datos) ---
 export 'services/firestore_services.dart';

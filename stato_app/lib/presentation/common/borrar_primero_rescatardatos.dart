@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../shared.dart';
+import '../shared_pantallas.dart';
 import '../../shared/shared.dart';
 
-class PantallaPrincipal extends StatelessWidget{
+class PantallaPrincipalBorrar extends StatelessWidget{
   final String rolUsuario;
-  const PantallaPrincipal({super.key, required this.rolUsuario});
+  const PantallaPrincipalBorrar({super.key, required this.rolUsuario});
 
   
   //Variables
@@ -49,7 +49,7 @@ class PantallaPrincipal extends StatelessWidget{
                             onPressed: () {
                               Navigator.push(
                                 context, 
-                                MaterialPageRoute(builder: (context) => const ProcessScreen()),
+                                MaterialPageRoute(builder: (context) => const PantallaProceso()),
                                 );
                               },
                           child: const Text('Procesos')

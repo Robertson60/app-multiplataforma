@@ -1,42 +1,52 @@
-// importo la clase Process desde otro archivo
+import 'package:stato_app/shared/models/subproceso.dart';
 import 'package:stato_app/shared/shared.dart';
 
-// defino la clase que se encarga de manejar los procesos
 class ProcessManager {
-  // creo una lista privada donde guardo todos mis procesos
-  final List<Process> _processes = [];
+  final List<Project> _projects = [];
 
-  // creo un getter para poder ver la lista desde fuera sin modificarla directamente
-  List<Process> get processes => _processes;
+  final Map<Stage, List<SubProcess>> stageProcesses = {
+    Stage.venta: [],
+    Stage.produccion: [],
+    Stage.instalacion: [],
+  };
 
-  // creo una funcion para agregar un nuevo proceso
-  void addProcess(String name) {
-    // agrego un nuevo proceso a la lista con el nombre que recibo
-    _processes.add(Process(name: name));
+  List<Project> get projects => _projects;
+
+  void addProject(String name) {
+    _projects.add(Project(name: name));
   }
 
-  // creo una funcion para eliminar un proceso usando su posicion
-  void removeProcess(int index) {
-    // verifico que el indice sea valido antes de eliminar
-    if (index >= 0 && index < _processes.length) {
-      // elimino el proceso de la lista
-      _processes.removeAt(index);
+  void removeProject(String id) {
+    _projects.removeWhere((p) => p.id == id);
+  }
+
+  void addSubProcessToStage(Stage stage, String name) {
+    stageProcesses[stage]!.add(SubProcess(name: name));
+  }
+
+  void removeSubProcessFromStage(Stage stage, String subId) {
+    stageProcesses[stage]!.removeWhere((s) => s.id == subId);
+  }
+
+  void completeSubProcess(Project project) {
+    final stage = Stage.values[project.currentProcessIndex];
+    final processes = stageProcesses[stage]!;
+
+    if (processes.isEmpty) return;
+
+    if (project.currentSubIndex < processes.length - 1) {
+      project.currentSubIndex++;
+    } else {
+      _advanceStage(project);
     }
   }
 
-  // creo una funcion para marcar un proceso como completado
-  void markCompleted(int index) {
-    // verifico que el indice sea valido
-    if (index >= 0 && index < _processes.length) {
-      // cambio el estado del proceso a completado
-      _processes[index].isCompleted = true;
+  void _advanceStage(Project project) {
+    if (project.currentProcessIndex < Stage.values.length - 1) {
+      project.currentProcessIndex++;
+      project.currentSubIndex = 0;
+    } else {
+      project.isCompleted = true;
     }
-  }
-
-  // aqui obtengo el proceso actual que no esta completado
-  int get currentStep {
-    // busco el primer proceso que no este completado
-    // si todos estan completos devuelve -1
-    return _processes.indexWhere((p) => !p.isCompleted);
   }
 }

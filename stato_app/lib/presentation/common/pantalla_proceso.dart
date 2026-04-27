@@ -1,142 +1,200 @@
-// Importo la libreria principal de Flutter para crear la interfaz
 import 'package:flutter/material.dart';
+import 'package:stato_app/shared/shared.dart';
 
-// Importo mi logica donde manejo los procesos
-import '../../shared/logic/manager.dart';
-
-// Defino la pantalla principal como un widget con estado
-class ProcessScreen extends StatefulWidget {
-  const ProcessScreen({super.key});
+class PantallaProceso extends StatefulWidget {
+  const PantallaProceso({super.key});
 
   @override
-  State<ProcessScreen> createState() => _ProcessScreenState();
+  State<PantallaProceso> createState() => _PantallaProcesoState();
 }
 
-// Aqui manejo el estado de mi pantalla
-class _ProcessScreenState extends State<ProcessScreen> {
-  // Creo una instancia del manager para controlar mis procesos
-  final ProcessManager manager = ProcessManager();
-
-  // Creo un controlador para leer lo que escribo en el TextField
-  final TextEditingController controller = TextEditingController();
+class _PantallaProcesoState extends State<PantallaProceso> {
+  final manager = ProcessManager();
 
   @override
   Widget build(BuildContext context) {
-    // Uso Scaffold como estructura base de mi pantalla
     return Scaffold(
-      // Aqui creo la barra superior con un titulo
-      appBar: AppBar(title: const Text("Gestion de Procesos")),
+      appBar: AppBar(title: const Text("Gestión de Proyectos")),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            _buildStage(Stage.venta, "Ventas", Colors.blue),
+            _buildStage(Stage.produccion, "Taller", Colors.orange),
+            _buildStage(Stage.instalacion, "Instalación", Colors.green),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addProjectDialog,
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
 
-      // Aqui construyo todo el contenido de la pantalla
-      body: Column(
+  // 🔥 NUEVO: CADA ETAPA TIENE SUS PROCESOS COMO COLUMNAS INTERNAS
+  Widget _buildStage(Stage stage, String title, Color color) {
+    final processes = manager.stageProcesses[stage]!;
+
+    return Container(
+      width: 350,
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
         children: [
-          // Aqui creo el campo para agregar procesos
-          Padding(
-            padding: const EdgeInsets.all(8.0), // Le doy espacio alrededor
-            child: Row(
+          // ENCABEZADO
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+
+          // ➕ AGREGAR PROCESO
+          TextButton.icon(
+            onPressed: () => _addProcessDialog(stage),
+            icon: const Icon(Icons.add),
+            label: const Text("Añadir proceso"),
+          ),
+
+          // 🔥 LISTA DE PROCESOS (CADA UNO CON SUS PROYECTOS)
+          Expanded(
+            child: ListView(
+              children: processes
+                  .asMap()
+                  .entries
+                  .map(
+                    (entry) =>
+                        _buildProcessColumn(stage, entry.key, entry.value),
+                  )
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 🔥 CADA PROCESO ES UNA "SUB-COLUMNA"
+  Widget _buildProcessColumn(Stage stage, int index, subProcess) {
+    final projects = manager.projects.where(
+      (p) =>
+          Stage.values[p.currentProcessIndex] == stage &&
+          p.currentSubIndex == index,
+    );
+
+    return Card(
+      margin: const EdgeInsets.all(8),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // NOMBRE DEL PROCESO
+            Row(
               children: [
-                // Hago que el campo de texto ocupe todo el espacio disponible
                 Expanded(
-                  child: TextField(
-                    controller: controller, // Conecto el controlador
-                    decoration: const InputDecoration(
-                      labelText: "Nombre del proceso", // Texto de ayuda
-                    ),
+                  child: Text(
+                    subProcess.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-
-                // Creo el boton para agregar procesos
-                ElevatedButton(
+                IconButton(
+                  icon: const Icon(Icons.delete, size: 18),
                   onPressed: () {
-                    // Verifico que el campo no este vacio
-                    if (controller.text.isNotEmpty) {
-                      // Actualizo la interfaz
-                      setState(() {
-                        // Agrego el proceso usando el manager
-                        manager.addProcess(controller.text);
-
-                        // Limpio el campo de texto
-                        controller.clear();
-                      });
-                    }
+                    setState(() {
+                      manager.removeSubProcessFromStage(stage, subProcess.id);
+                    });
                   },
-                  child: const Text("Agregar"),
                 ),
               ],
             ),
+
+            const Divider(),
+
+            // 🔥 PROYECTOS DENTRO DEL PROCESO
+            ...projects.map((p) => _buildProjectCard(p)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 🔥 TARJETA DE PROYECTO
+  Widget _buildProjectCard(Project project) {
+    return Card(
+      color: Colors.white,
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: ListTile(
+        title: Text(project.name),
+        trailing: IconButton(
+          icon: const Icon(Icons.arrow_forward),
+          onPressed: () {
+            setState(() {
+              manager.completeSubProcess(project);
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  void _addProcessDialog(Stage stage) {
+    final controller = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Nuevo proceso"),
+        content: TextField(controller: controller),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                manager.addSubProcessToStage(stage, controller.text);
+              });
+              Navigator.pop(context);
+            },
+            child: const Text("Agregar"),
           ),
+        ],
+      ),
+    );
+  }
 
-          // Aqui muestro la lista de procesos
-          Expanded(
-            child: ListView.builder(
-              // Indico cuantos procesos hay
-              itemCount: manager.processes.length,
+  void _addProjectDialog() {
+    final controller = TextEditingController();
 
-              // Construyo cada elemento de la lista
-              itemBuilder: (context, index) {
-                // Obtengo el proceso actual
-                final process = manager.processes[index];
-
-                return ListTile(
-                  // Muestro el nombre del proceso
-                  title: Text(process.name),
-
-                  // Agrego botones al lado derecho
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min, // Ajusto el tamaño
-                    children: [
-                      // Boton para marcar como completado
-                      IconButton(
-                        icon: Icon(
-                          // Cambio el icono dependiendo si esta completo o no
-                          process.isCompleted
-                              ? Icons.check_circle
-                              : Icons.radio_button_unchecked,
-
-                          // Cambio el color dependiendo del estado
-                          color: process.isCompleted
-                              ? Colors.green
-                              : Colors.grey,
-                        ),
-
-                        onPressed: () {
-                          setState(() {
-                            // Marco el proceso como completado
-                            manager.markCompleted(index);
-                          });
-                        },
-                      ),
-
-                      // Boton para eliminar el proceso
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          setState(() {
-                            // Elimino el proceso de la lista
-                            manager.removeProcess(index);
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-
-          // Aqui muestro cual es el proceso actual
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              // Si ya complete todos los procesos muestro este mensaje
-              manager.currentStep == -1
-                  ? "Todos los procesos completados"
-                  // Si no, muestro el proceso actual
-                  : "Proceso actual: ${manager.processes[manager.currentStep].name}",
-
-              // Le doy estilo al texto
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Nuevo Proyecto"),
+        content: TextField(controller: controller),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                manager.addProject(controller.text);
+              });
+              Navigator.pop(context);
+            },
+            child: const Text("Agregar"),
           ),
         ],
       ),

@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:stato_app/presentation/shared_pantallas.dart';
 
 
-class PantallaAjustes extends StatefulWidget {
+class PantallaInventario extends StatefulWidget {
   final String rolUsuario;
-  const PantallaAjustes({super.key, required this.rolUsuario});
+  const PantallaInventario({super.key, required this.rolUsuario});
 
   @override
-  State<PantallaAjustes> createState() => _PantallaAjustesState();
+  State<PantallaInventario> createState() => _PantallaInventarioState();
 }
 
-class _PantallaAjustesState extends State<PantallaAjustes> {
+class _PantallaInventarioState extends State<PantallaInventario> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ajustes') ),
+      appBar: AppBar(title: const Text('Inventario') ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(32.0),
