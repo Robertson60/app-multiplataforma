@@ -1,6 +1,8 @@
 import 'package:stato_app/shared/models/subproceso.dart';
 import 'package:stato_app/shared/shared.dart';
 
+enum Stage {venta, produccion, instalacion}
+
 class ProcessManager {
   final List<Project> _projects = [];
 

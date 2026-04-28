@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // Modifica tu función para que sea así:
   Future<void> agregarModulo(String clienteId, String proyectoId, Map<String, dynamic> datosModulo) async {
     try {
       await _db

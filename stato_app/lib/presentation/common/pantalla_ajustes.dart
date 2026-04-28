@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stato_app/presentation/shared_pantallas.dart';
+//import 'package:stato_app/presentation/shared_pantallas.dart';
 
 
 class PantallaAjustes extends StatefulWidget {
