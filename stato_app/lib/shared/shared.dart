@@ -8,8 +8,8 @@ export 'models/config_canto.dart';
 export 'models/config_material.dart';
 export 'models/proyecto.dart';
 export 'models/usuario.dart';
-export 'models/procesos.dart';
-
+export 'models/tablero.dart';
+export 'models/herraje_inventario.dart';
 
 // --- LÓGICA (Los cálculos y herramientas) ---
 export 'logic/calculador_huacal.dart';
