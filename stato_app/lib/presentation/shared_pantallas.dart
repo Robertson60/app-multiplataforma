@@ -12,7 +12,7 @@
   export 'common/desplegable_proyecto.dart';
   export 'common/desplegable_huacal.dart';
 //Desktop/Web
-export 'common/borrar_primero_rescatardatos.dart';
+
 
 
 //Mobile
