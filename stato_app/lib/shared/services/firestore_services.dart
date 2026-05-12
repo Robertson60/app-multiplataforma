@@ -3,7 +3,62 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<void> agregarModulo(String clienteId, String proyectoId, Map<String, dynamic> datosModulo) async {
+  // AGREGAR MATERIAL
+
+  Future<void> agregarMaterial(String tipo, Map<String, dynamic> datos) async {
+    try {
+      await _db
+          .collection('inventario')
+          .doc(tipo)
+          .collection('items')
+          .add(datos);
+    } catch (e) {
+      print("Error al agregar material: $e");
+    }
+  }
+
+  // OBTENER MATERIALES
+
+  Stream<QuerySnapshot> obtenerMateriales(String tipo) {
+    return _db
+        .collection('inventario')
+        .doc(tipo)
+        .collection('items')
+        .snapshots();
+  }
+
+  // ACTUALIZAR MATERIAL
+
+  Future<void> actualizarMaterial(
+    String tipo,
+    String id,
+    Map<String, dynamic> datos,
+  ) async {
+    await _db
+        .collection('inventario')
+        .doc(tipo)
+        .collection('items')
+        .doc(id)
+        .update(datos);
+  }
+
+  // ELIMINAR MATERIAL
+
+  Future<void> eliminarMaterial(String tipo, String id) async {
+    await _db
+        .collection('inventario')
+        .doc(tipo)
+        .collection('items')
+        .doc(id)
+        .delete();
+  }
+
+  // Modifica tu función para que sea así:
+  Future<void> agregarModulo(
+    String clienteId,
+    String proyectoId,
+    Map<String, dynamic> datosModulo,
+  ) async {
     try {
       await _db
           .collection('clientes')
@@ -19,7 +74,11 @@ class FirestoreService {
   }
 
   // Para que el proyecto sea editable, usamos set con merge: true
-  Future<void> actualizarProyecto(String clienteId, String proyectoId, Map<String, dynamic> datos) async {
+  Future<void> actualizarProyecto(
+    String clienteId,
+    String proyectoId,
+    Map<String, dynamic> datos,
+  ) async {
     await _db
         .collection('clientes')
         .doc(clienteId)
