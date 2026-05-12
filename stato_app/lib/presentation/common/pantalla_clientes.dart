@@ -64,26 +64,74 @@ class PantallaListaClientes extends StatelessWidget {
     );
   }
 
-  void _modalNuevoCliente(BuildContext context) {
-    final controller = TextEditingController();
+  void _modalNuevoCliente(BuildContext context){
+    final TextEditingController nombreController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController telefonoController = TextEditingController();
+    final TextEditingController direccionController = TextEditingController();
+
+    Future<void> agregarCliente() async {
+      if (nombreController.text.isNotEmpty &&
+          emailController.text.isNotEmpty &&
+          telefonoController.text.isNotEmpty &&
+          direccionController.text.isNotEmpty) {
+        await FirebaseFirestore.instance.collection('clientes').add({
+          'nombre': nombreController.text,
+          'email': emailController.text,
+          'telefono': telefonoController.text,
+          'direccion': direccionController.text,
+        });
+
+        Navigator.pop(context);
+      }
+    }
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Registrar Cliente"),
-        content: TextField(controller: controller, decoration: const InputDecoration(hintText: "Nombre completo")),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancelar")),
-          ElevatedButton(
-            onPressed: () {
-              if (controller.text.isNotEmpty) {
-                FirebaseFirestore.instance.collection('clientes').add({'nombre': controller.text});
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Nuevo Cliente"),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nombreController,
+                  decoration: const InputDecoration(labelText: "Nombre"),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(labelText: "Email"),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: telefonoController,
+                  decoration: const InputDecoration(labelText: "Teléfono"),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: direccionController,
+                  decoration: const InputDecoration(labelText: "Dirección"),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
                 Navigator.pop(context);
-              }
-            },
-            child: const Text("Guardar"),
-          )
-        ],
-      ),
+              },
+              child: const Text("Cancelar"),
+            ),
+            ElevatedButton(
+              onPressed: agregarCliente,
+              child: const Text("Guardar"),
+            ),
+          ],
+        );
+      },
     );
   }
 }
+

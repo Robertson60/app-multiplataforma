@@ -6,11 +6,11 @@ export 'models/config_entrepanos.dart';
 export 'models/config_puerta.dart';
 export 'models/config_canto.dart';
 export 'models/config_material.dart';
-export 'models/procesos.dart';
 export 'models/proyecto.dart';
 export 'models/usuario.dart';
-export 'models/proyecto_prueba.dart';
-
+export 'models/tablero.dart';
+export 'models/herraje_inventario.dart';
+export 'models/procesos.dart';
 
 // --- LÓGICA (Los cálculos y herramientas) ---
 export 'logic/calculador_huacal.dart';
