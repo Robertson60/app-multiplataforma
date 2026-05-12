@@ -27,31 +27,30 @@ class _PantallaLoginState extends State<PantallaLogin> {
   // --- LÓGICA DE ACCESO CON ROLES ---
   Future<void> _intentarLogin() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      _mensajeError("Por favor, llena todos los campos");
+      _mensajeError("Llena todos los datos");
       return;
     }
 
     setState(() => _estaCargando = true);
 
     try {
-      // 1. Autenticación en Firebase Auth
+      //Autenticación en Firebase Auth
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
-      // 2. Obtener el ROL desde Firestore
+      //Rol desde Firestore
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('usuarios')
           .doc(userCredential.user!.uid)
           .get();
 
       if (userDoc.exists) {
-        // Extraemos el rol (admin, vendedor, taller, instalador)
         String rolRecuperado = userDoc['rol'] ?? 'taller';
 
         if (mounted) {
-          // 3. Navegar a la lista de clientes pasando el rol
+          //Lista de clientes pasando el rol
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -61,7 +60,7 @@ class _PantallaLoginState extends State<PantallaLogin> {
         }
       } else {
         _mensajeError("El usuario no tiene un rol asignado en la base de datos.");
-        await FirebaseAuth.instance.signOut(); // Cerramos sesión por seguridad
+        await FirebaseAuth.instance.signOut();
       }
     } on FirebaseAuthException catch (e) {
       String errorMsg = "Error al entrar";

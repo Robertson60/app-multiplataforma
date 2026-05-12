@@ -66,7 +66,7 @@ class FirestoreService {
           .collection('proyectos')
           .doc(proyectoId)
           .collection('modulos')
-          .add(datosModulo); // .add() genera un ID automático para el mueble
+          .add(datosModulo); 
     } catch (e) {
       print("Error al agregar módulo: $e");
       rethrow;
