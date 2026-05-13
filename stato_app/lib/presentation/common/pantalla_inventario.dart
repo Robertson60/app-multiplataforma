@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../shared/services/firestore_services.dart';
-//import 'package:stato_app/presentation/shared_pantallas.dart';
-
-import 'package:stato_app/shared/shared.dart';
 
 class PantallaInventario extends StatefulWidget {
   final String rolUsuario;
@@ -14,24 +12,11 @@ class PantallaInventario extends StatefulWidget {
 }
 
 class _PantallaInventarioState extends State<PantallaInventario> {
+  // =========================
+  // FIREBASE
+  // =========================
+
   final FirestoreService firestoreService = FirestoreService();
-  // =========================
-  // BISAGRAS
-  // =========================
-
-  List<Map<String, dynamic>> bisagras = [];
-
-  // =========================
-  // CORREDERAS
-  // =========================
-
-  List<Map<String, dynamic>> correderas = [];
-
-  // =========================
-  // TABLEROS
-  // =========================
-
-  List<Map<String, dynamic>> tableros = [];
 
   // =========================
   // CONTROLADORES BISAGRAS
@@ -68,6 +53,91 @@ class _PantallaInventarioState extends State<PantallaInventario> {
   final precioTableroController = TextEditingController();
 
   final cantidadTableroController = TextEditingController();
+
+  // =========================
+  // MENSAJE ERROR
+  // =========================
+
+  void mostrarError(String mensaje) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(backgroundColor: Colors.red, content: Text(mensaje)),
+    );
+  }
+
+  // =========================
+  // ACTUALIZAR CANTIDAD
+  // =========================
+
+  void actualizarCantidad(
+    String tipo,
+    String id,
+    int cantidadActual,
+    bool agregar,
+  ) {
+    final controller = TextEditingController();
+
+    showDialog(
+      context: context,
+
+      builder: (context) {
+        return AlertDialog(
+          title: Text(agregar ? "Agregar cantidad" : "Quitar cantidad"),
+
+          content: TextField(
+            controller: controller,
+
+            keyboardType: TextInputType.number,
+
+            decoration: const InputDecoration(labelText: "Cantidad"),
+          ),
+
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+
+              child: const Text("Cancelar"),
+            ),
+
+            ElevatedButton(
+              onPressed: () async {
+                int cantidad = int.tryParse(controller.text) ?? 0;
+
+                int nuevaCantidad = agregar
+                    ? cantidadActual + cantidad
+                    : cantidadActual - cantidad;
+
+                if (nuevaCantidad < 0) {
+                  mostrarError("No hay suficiente inventario");
+
+                  return;
+                }
+
+                await firestoreService.actualizarMaterial(tipo, id, {
+                  "cantidad": nuevaCantidad,
+                });
+
+                if (nuevaCantidad <= 20) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.orange,
+
+                      content: Text("⚠ Poco inventario en $tipo"),
+                    ),
+                  );
+                }
+
+                Navigator.pop(context);
+              },
+
+              child: const Text("Aceptar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   // =========================
   // AGREGAR BISAGRA
@@ -170,225 +240,7 @@ class _PantallaInventarioState extends State<PantallaInventario> {
   }
 
   // =========================
-  // ALERTA INVENTARIO
-  // =========================
-
-  void verificarInventario(String nombre, int cantidad) {
-    if (cantidad <= 20) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.orange,
-
-          content: Text("⚠ Poco inventario de $nombre"),
-        ),
-      );
-    }
-  }
-
-  // =========================
-  // ERROR INVENTARIO
-  // =========================
-
-  void mostrarError(String mensaje) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(backgroundColor: Colors.red, content: Text(mensaje)),
-    );
-  }
-
-  // =========================
-  // MODIFICAR BISAGRA
-  // =========================
-
-  void modificarBisagra(int index, bool agregar) {
-    final controller = TextEditingController();
-
-    showDialog(
-      context: context,
-
-      builder: (context) {
-        return AlertDialog(
-          title: Text(agregar ? "Agregar piezas" : "Quitar piezas"),
-
-          content: TextField(
-            controller: controller,
-
-            keyboardType: TextInputType.number,
-
-            decoration: const InputDecoration(labelText: "Cantidad"),
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-
-              child: const Text("Cancelar"),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                int cantidad = int.tryParse(controller.text) ?? 0;
-
-                setState(() {
-                  if (agregar) {
-                    bisagras[index]["cantidad"] += cantidad;
-                  } else {
-                    if (cantidad > bisagras[index]["cantidad"]) {
-                      mostrarError("No hay suficiente inventario");
-                    } else {
-                      bisagras[index]["cantidad"] -= cantidad;
-
-                      verificarInventario(
-                        bisagras[index]["tipo"],
-
-                        bisagras[index]["cantidad"],
-                      );
-                    }
-                  }
-                });
-
-                Navigator.pop(context);
-              },
-
-              child: const Text("Aceptar"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // =========================
-  // MODIFICAR CORREDERA
-  // =========================
-
-  void modificarCorredera(int index, bool agregar) {
-    final controller = TextEditingController();
-
-    showDialog(
-      context: context,
-
-      builder: (context) {
-        return AlertDialog(
-          title: Text(agregar ? "Agregar piezas" : "Quitar piezas"),
-
-          content: TextField(
-            controller: controller,
-
-            keyboardType: TextInputType.number,
-
-            decoration: const InputDecoration(labelText: "Cantidad"),
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-
-              child: const Text("Cancelar"),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                int cantidad = int.tryParse(controller.text) ?? 0;
-
-                setState(() {
-                  if (agregar) {
-                    correderas[index]["cantidad"] += cantidad;
-                  } else {
-                    if (cantidad > correderas[index]["cantidad"]) {
-                      mostrarError("No hay suficiente inventario");
-                    } else {
-                      correderas[index]["cantidad"] -= cantidad;
-
-                      verificarInventario(
-                        "Corredera ${correderas[index]["medida"]}",
-
-                        correderas[index]["cantidad"],
-                      );
-                    }
-                  }
-                });
-
-                Navigator.pop(context);
-              },
-
-              child: const Text("Aceptar"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // =========================
-  // MODIFICAR TABLERO
-  // =========================
-
-  void modificarTablero(int index, bool agregar) {
-    final controller = TextEditingController();
-
-    showDialog(
-      context: context,
-
-      builder: (context) {
-        return AlertDialog(
-          title: Text(agregar ? "Agregar piezas" : "Quitar piezas"),
-
-          content: TextField(
-            controller: controller,
-
-            keyboardType: TextInputType.number,
-
-            decoration: const InputDecoration(labelText: "Cantidad"),
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-
-              child: const Text("Cancelar"),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                int cantidad = int.tryParse(controller.text) ?? 0;
-
-                setState(() {
-                  if (agregar) {
-                    tableros[index]["cantidad"] += cantidad;
-                  } else {
-                    if (cantidad > tableros[index]["cantidad"]) {
-                      mostrarError("No hay suficiente inventario");
-                    } else {
-                      tableros[index]["cantidad"] -= cantidad;
-
-                      verificarInventario(
-                        tableros[index]["color"],
-
-                        tableros[index]["cantidad"],
-                      );
-                    }
-                  }
-                });
-
-                Navigator.pop(context);
-              },
-
-              child: const Text("Aceptar"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // =========================
-  // FORMULARIO BISAGRA
+  // FORMULARIOS
   // =========================
 
   void mostrarFormularioBisagra() {
@@ -455,10 +307,6 @@ class _PantallaInventarioState extends State<PantallaInventario> {
     );
   }
 
-  // =========================
-  // FORMULARIO CORREDERA
-  // =========================
-
   void mostrarFormularioCorredera() {
     showDialog(
       context: context,
@@ -522,10 +370,6 @@ class _PantallaInventarioState extends State<PantallaInventario> {
       },
     );
   }
-
-  // =========================
-  // FORMULARIO TABLERO
-  // =========================
 
   void mostrarFormularioTablero() {
     showDialog(
@@ -605,6 +449,109 @@ class _PantallaInventarioState extends State<PantallaInventario> {
     );
   }
 
+  Widget construirLista(String tipo, IconData icono) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: firestoreService.obtenerMateriales(tipo),
+
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final documentos = snapshot.data!.docs;
+
+        if (documentos.isEmpty) {
+          return Text("No hay $tipo");
+        }
+
+        return Column(
+          children: documentos.map((doc) {
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+            return Card(
+              child: ListTile(
+                leading: Icon(icono),
+
+                title: Text(
+                  tipo == "correderas"
+                      ? "Corredera ${data["medida"]} cm"
+                      : tipo == "tableros"
+                      ? data["color"]
+                      : data["tipo"],
+                ),
+
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    if (data["marca"] != null) Text("Marca: ${data["marca"]}"),
+
+                    if (data["grosor"] != null)
+                      Text("Grosor: ${data["grosor"]}"),
+
+                    Text("Precio: \$${data["precio"]}"),
+
+                    Text("Cantidad: ${data["cantidad"]}"),
+
+                    if (data["cantidad"] <= 20)
+                      const Text(
+                        "⚠ Poco inventario",
+
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                  ],
+                ),
+
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+
+                  children: [
+                    // BOTON RESTAR
+                    IconButton(
+                      onPressed: () {
+                        actualizarCantidad(
+                          tipo,
+
+                          doc.id,
+
+                          data["cantidad"],
+
+                          false,
+                        );
+                      },
+
+                      icon: const Icon(Icons.remove_circle, color: Colors.red),
+                    ),
+
+                    // BOTON SUMAR
+                    IconButton(
+                      onPressed: () {
+                        actualizarCantidad(
+                          tipo,
+
+                          doc.id,
+
+                          data["cantidad"],
+
+                          true,
+                        );
+                      },
+
+                      icon: const Icon(Icons.add_circle, color: Colors.green),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -644,7 +591,43 @@ class _PantallaInventarioState extends State<PantallaInventario> {
         ],
       ),
 
-      body: const Center(child: Text("Inventario funcionando")),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+            const Text(
+              "Bisagras",
+
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+
+            construirLista("bisagras", Icons.build),
+
+            const SizedBox(height: 30),
+
+            const Text(
+              "Correderas",
+
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+
+            construirLista("correderas", Icons.linear_scale),
+
+            const SizedBox(height: 30),
+
+            const Text(
+              "Tableros",
+
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+
+            construirLista("tableros", Icons.dashboard),
+          ],
+        ),
+      ),
     );
   }
 }
