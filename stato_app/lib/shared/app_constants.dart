@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+enum TipoAplicacion { admin, taller, instalador }
+
+
 class AppConstants {
 
   // --------------  IDENTIDAD DE MARCA --------------  
@@ -18,8 +21,6 @@ class AppConstants {
   static const double grosorCanto10  =  1.0; 
 
   // --- RUTAS DE ASSETS (Imágenes y Renders) ---
-
-
 
   // --- CATEGORÍAS PARA MODELOS ---
   

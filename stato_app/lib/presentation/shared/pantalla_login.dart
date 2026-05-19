@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:stato_app/shared/app_constants.dart';
 import '../shared_pantallas.dart';
 
 class PantallaLogin extends StatefulWidget {
-  const PantallaLogin({super.key});
+  final TipoAplicacion tipoApp;
+  const PantallaLogin({super.key, required this.tipoApp});
 
   @override
   State<PantallaLogin> createState() => _PantallaLoginState();
 }
 
 class _PantallaLoginState extends State<PantallaLogin> {
-  // Controladores originales
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  
   bool _viewPassword = false;
   bool _estaCargando = false;
 
   void _togglePasswordView() {
-    setState(() {
-      _viewPassword = !_viewPassword;
-    });
+    setState(() => _viewPassword = !_viewPassword);
   }
 
-  // --- LÓGICA DE ACCESO CON ROLES ---
   Future<void> _intentarLogin() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       _mensajeError("Llena todos los datos");
@@ -34,13 +31,11 @@ class _PantallaLoginState extends State<PantallaLogin> {
     setState(() => _estaCargando = true);
 
     try {
-      //Autenticación en Firebase Auth
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
-      //Rol desde Firestore
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('usuarios')
           .doc(userCredential.user!.uid)
@@ -49,15 +44,40 @@ class _PantallaLoginState extends State<PantallaLogin> {
       if (userDoc.exists) {
         String rolRecuperado = userDoc['rol'] ?? 'taller';
 
-        if (mounted) {
-          //Lista de clientes pasando el rol
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PantallaPrincipal(rolUsuario: rolRecuperado),
-            ),
-          );
+        if (!mounted) return;
+
+        
+        if (widget.tipoApp == TipoAplicacion.admin && rolRecuperado != 'admin' && rolRecuperado != 'vendedor') {
+          _mensajeError("Este ejecutable es exclusivo para administración.");
+          await FirebaseAuth.instance.signOut();
+          return;
         }
+        if (widget.tipoApp == TipoAplicacion.taller && rolRecuperado != 'taller') {
+          _mensajeError("Este acceso es exclusivo para operadores del taller.");
+          await FirebaseAuth.instance.signOut();
+          return;
+        }
+        if (widget.tipoApp == TipoAplicacion.instalador && rolRecuperado != 'instalador') {
+          _mensajeError("Este acceso es exclusivo para instaladores en campo.");
+          await FirebaseAuth.instance.signOut();
+          return;
+        }
+
+        
+        Widget pantallaDestino;
+        if (rolRecuperado == 'admin' || rolRecuperado == 'vendedor') {
+          pantallaDestino = PantallaPrincipal(rolUsuario: rolRecuperado);
+        } else if (rolRecuperado == 'taller') {
+          pantallaDestino = const Scaffold(body: Center(child: Text("Nueva Pantalla Taller Móvil"))); 
+        } else {
+          pantallaDestino = const Scaffold(body: Center(child: Text("Nueva Pantalla Instalador Móvil")));
+        }
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => pantallaDestino),
+        );
+
       } else {
         _mensajeError("El usuario no tiene un rol asignado en la base de datos.");
         await FirebaseAuth.instance.signOut();
@@ -83,6 +103,11 @@ class _PantallaLoginState extends State<PantallaLogin> {
 
   @override
   Widget build(BuildContext context) {
+    String subTituloApp = "";
+    if (widget.tipoApp == TipoAplicacion.admin) subTituloApp = " - Administración";
+    if (widget.tipoApp == TipoAplicacion.taller) subTituloApp = " - Taller";
+    if (widget.tipoApp == TipoAplicacion.instalador) subTituloApp = " - Instaladores";
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -90,18 +115,11 @@ class _PantallaLoginState extends State<PantallaLogin> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Título original
-              const Text(
-                "Stato Cocinas",
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                ),
+              Text(
+                "${AppConstants.nombreApp}$subTituloApp",
+                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, letterSpacing: 2),
               ),
               const SizedBox(height: 50),
-
-              // Caja de Usuario (Email)
               SizedBox(
                 width: 350,
                 child: TextField(
@@ -115,8 +133,6 @@ class _PantallaLoginState extends State<PantallaLogin> {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Caja de Contraseña
               SizedBox(
                 width: 350,
                 child: TextField(
@@ -134,8 +150,6 @@ class _PantallaLoginState extends State<PantallaLogin> {
                 ),
               ),
               const SizedBox(height: 40),
-
-              // Botón de Entrar original
               SizedBox(
                 width: 350,
                 height: 50,
@@ -151,8 +165,6 @@ class _PantallaLoginState extends State<PantallaLogin> {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Imagen Decorativa original
               SizedBox(
                 width: 400,
                 height: 200,
